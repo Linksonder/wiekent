@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Handlebars demo</title>
+</head>
+<link href="./style.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
+<body>
+
+
+    <div class="container text-center">
+
+        <img class="logo" src="logo.png" id="logo" width="300px"  draggable="true" ondrag="update(event)">
+        <h3>Is het al wiekent?</h3>
+
+        {{{body}}}
+    </div>
+</body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        var socket = io();
+        socket.on('drag-update', function(event){
+            
+            document.getElementById('logo').style.left = event.x + 'px';
+            document.getElementById('logo').style.top = event.y + 'px';
+
+        });
+
+        function update(event){
+            console.log(event);
+
+            socket.emit('drag', {x: event.x, y: event.y});   
+        }
+
+    </script>
+</html>
