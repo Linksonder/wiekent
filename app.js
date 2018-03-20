@@ -51,7 +51,7 @@ require('./routes/routes')(app, passport); //app moet mee!
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
-server.listen(3000);
+server.listen(process.env.PORT) || 3000;
 console.log('listening to port 3000');
 
 
