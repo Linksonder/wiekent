@@ -10,10 +10,12 @@
 
 <body>
 
+    <img class="logo" src="logo.png" id="draggable-element" width="300px" >
+
 
     <div class="container text-center">
 
-        <img class="logo" src="logo.png" id="logo" width="300px"  draggable="true" ondrag="update(event)">
+
         <h3>Is het al wiekent?</h3>
 
         {{{body}}}
@@ -22,19 +24,53 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
 
-        var socket = io();
-        socket.on('drag-update', function(event){
-            
-            document.getElementById('logo').style.left = event.x + 'px';
-            document.getElementById('logo').style.top = event.y + 'px';
+        var selected = null, // Object of the element to be moved
+            x_pos = 0, y_pos = 0, // Stores x & y coordinates of the mouse pointer
+            x_elem = 0, y_elem = 0; // Stores top, left values (edge) of the element
 
+        // Will be called when user starts dragging an element
+        function _drag_init(elem) {
+            // Store the object of the element which needs to be moved
+            selected = elem;
+            x_elem = x_pos - selected.offsetLeft;
+            y_elem = y_pos - selected.offsetTop;
+        }
+
+        // Will be called when user dragging an element
+        function _move_elem(e) {
+            x_pos = document.all ? window.event.clientX : e.pageX;
+            y_pos = document.all ? window.event.clientY : e.pageY;
+            if (selected !== null) {
+                var newX = (x_pos - x_elem);
+                var newY = (y_pos - y_elem);
+                selected.style.left = newX + 'px';
+                selected.style.top = newY + 'px';         
+                socket.emit('drag', { pageX: newX, pageY: newY})
+            }
+        }
+
+        // Destroy the object when we are done
+        function _destroy() {
+            selected = null;
+        }
+
+        // Bind the functions...
+        document.getElementById('draggable-element').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.onmousemove = _move_elem;
+        document.onmouseup = _destroy;
+
+        var socket = io();
+        socket.on('drag-update', (e) => {
+            var el = document.getElementById('draggable-element');
+            el.style.left = (e.pageX - x_elem) + 'px';
+            el.style.top = (e.pageY - y_elem) + 'px';    
         });
 
-        function update(event){
-            console.log(event);
 
-            socket.emit('drag', {x: event.x, y: event.y});   
-        }
 
     </script>
 </html>

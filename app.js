@@ -50,9 +50,9 @@ require('./routes/routes')(app, passport); //app moet mee!
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-
-server.listen(process.env.PORT) || 3000;
-console.log('listening to port 3000');
+var port = process.env.PORT || 3000;
+server.listen(port);
+console.log('listening to port ' + port);
 
 
 //document.findbyid('content').innerHtml = result; 
