@@ -36,9 +36,6 @@ var swaggerSpec = require('./config/swagger');
 // const swaggerDocument = require('./swagger.json');
 
 
-
-
-
 //passport
 app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
 app.use(passport.initialize());
