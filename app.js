@@ -29,12 +29,7 @@ app.use(express.static('public'))
 var dbconfig = require('./config/database');
 mongoose.connect(dbconfig.url);
 require('./models/user');
-require('./config/passport')(app, passport);
-
-//swagger!
-var swaggerSpec = require('./config/swagger');
-// const swaggerDocument = require('./swagger.json');
-
+require('./config/passport')(app, passport, io);
 
 //passport
 app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
@@ -42,17 +37,15 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-// //cookie van gekke string naar een gewoon object
-
 //my thingys
-require('./config/socket')(io);
+require('./config/socket').connect(io);
 require('./routes/routes')(app, passport); //app moet mee!
 
+var swaggerSpec = require('./config/swagger'); //object, varaible, functie, 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 var port = process.env.PORT || 3000;
 server.listen(port);
 console.log('listening to port ' + port);
-
 
 //document.findbyid('content').innerHtml = result; 

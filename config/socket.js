@@ -1,36 +1,59 @@
 
 
  
-var connections = [];
-console.log('test');
-var io = null;
+function SocketManager(){
+    var self = this;
 
-module.exports = function(newIo){
+    self.io =  null;
+    self.sockets = [];
 
-    if(newIo){
-        io = newIo;
-        connections = [];
-        var connections = [];
+    //The constructor of the socketmanager.
+    //listen to connections
+    self.connect = function(io){
+        this.io = io;
         io.on('connection', function(socket){
-            connections.push(socket);
+            self.sockets.push(socket);
+        })
+    };
 
-            socket.on('drag', function(event){
-                io.emit('drag-update', event);
-            })
-        });    
+    //Emit to alle listening sockets
+    self.emitAll =  function(name, data){
+        this.io.emit(name, data);
+    }
+
+}
+
+var sm = new SocketManager();
+module.exports = sm;
+
+
+
+// module.exports = function(newIo){
+
+//     if(newIo){
+//         io = newIo;
+//         connections = [];
+//         var connections = [];
+//         io.on('connection', function(socket){
+//             connections.push(socket);
+
+//             socket.on('drag', function(event){
+//                 io.emit('drag-update', event);
+//             })
+//         });    
 
         
-    }
-    else{
-        return {
-            io: io,
-            send: function(msg, data){
-                if(this.io)
-                    io.emit(msg, data);
-            },
-            connections: connections
-        };
-    }
-};
+//     }
+//     else{
+//         return {
+//             io: io,
+//             send: function(msg, data){
+//                 if(this.io)
+//                     io.emit(msg, data);
+//             },
+//             connections: connections
+//         };
+//     }
+// };
 
 

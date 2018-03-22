@@ -4,11 +4,11 @@ var swaggerJSDoc = require('swagger-jsdoc');
 // swagger definition
 var swaggerDefinition = {
     info: {
-      title: 'Node Swagger API',
+      title: 'Wiekent API == EPIC',
       version: '1.0.1',
       description: 'Demonstrating how to desribe a RESTful API with Swagger',
     },
-    host: 'localhost:3000',
+    host:  process.env.PORT  ? 'https://wiekent.herokuapp.com' : 'localhost:3000',
     basePath: '/',
   };
   
@@ -20,7 +20,7 @@ var swaggerDefinition = {
     apis: ['./routes/*.js'],
   };
   
-  // initialize swagger-jsdoc
+  // initialize swagger-jsdoc - Di moete we hebben!
   var swaggerSpec = swaggerJSDoc(options);
   
 

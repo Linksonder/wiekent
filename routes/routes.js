@@ -1,8 +1,8 @@
 
+var socket = require('../config/socket');
 
-var sockets = require('../config/socket')();
 
-module.exports = function(app, passport)
+module.exports = function(app, passport, io)
 {
     app.get('/', (req, res) => {
         sockets.send('new user', req.user);
@@ -41,6 +41,7 @@ module.exports = function(app, passport)
      *         description: An object containg the truth
      */
     app.get('/api/ishetweekend', (req, res) => {
+        socket.emitAll('update', 'een nieuwe gebruiker!');
         res.send({ isWeekend: true, msg: "Het is altijd weekend!"});
     })
 
